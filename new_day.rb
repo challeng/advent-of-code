@@ -1,13 +1,11 @@
 require 'net/http'
 
-day = ARGV[0]
-if day.nil?
-  puts 'Forgot to put a date!'
-  return
-end
+time = Time.now + 3600
+day = time.day
+year = time.year
 
-system("mkdir #{day}")
-File.open("#{day}/#{day}.rb", 'w') do |f|
+system("mkdir #{year}/#{day}")
+File.open("#{year}/#{day}/#{day}.rb", 'w') do |f|
   f.write("""class Day#{day}
   def initialize(file)
     @inputs = parse_file(file)
@@ -27,7 +25,7 @@ end
   """)
 end
 
-File.open("#{day}/#{day}_spec.rb", 'w') do |f|
+File.open("#{year}/#{day}/#{day}_spec.rb", 'w') do |f|
   f.write("""require 'rspec'
   require './#{day}'
   require 'pry'
@@ -73,8 +71,8 @@ File.open("#{day}/#{day}_spec.rb", 'w') do |f|
   end
   """)
 end
-system("touch #{day}/ex_input.txt")
-system("touch #{day}/input.txt")
+system("touch #{year}/#{day}/ex_input.txt")
+system("touch#{year}/ #{day}/input.txt")
 
 cookie = ENV['AOC_SESSION_TOKEN']
 uri = URI("https://adventofcode.com/2023/day/#{day}/input")
@@ -86,4 +84,4 @@ res = Net::HTTP.start(uri.hostname, uri.port, use_ssl: uri.scheme == 'https') { 
   http.request(req)
 }
 
-File.write("#{day}/input.txt", res.body)
+File.write("#{year}/#{day}/input.txt", res.body)
